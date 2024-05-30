@@ -20,7 +20,7 @@ public class StoreHall extends AppCompatActivity {
     private static final String TAG = "storehall";
     private DBHelper dbHelper;
 
-    ImageView clientImg;//손님 이미지
+    ImageView clientImg,drinkImg;//손님 이미지,음료 이미지
     TextView clientOrder;//손님 주문 대사
     Button moveKitchen, reStart;//눌렀을 때 kitchen.class, StoreHall2.class로 가는 버튼
     Beverage userBeverage;//이용자가 생성한 음료
@@ -49,6 +49,7 @@ public class StoreHall extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_store_hall);
+
         dbHelper = new DBHelper(this);
 
         clientImg=(ImageView)findViewById(R.id.client);
@@ -57,6 +58,7 @@ public class StoreHall extends AppCompatActivity {
         reStart=(Button)findViewById(R.id.getNewCliet);
         backGroundImg=(LinearLayout)findViewById(R.id.bg);
         expTextView=(TextView)findViewById(R.id.expTextView);
+        drinkImg=(ImageView)findViewById(R.id.drinkImage);
 
 
         firstIntent = getIntent();
@@ -76,13 +78,14 @@ public class StoreHall extends AppCompatActivity {
             //이용자가 만든 음료 완성도 확인
             beverage_completion=checkComplication(firstIntent);
             //음료 만족도별 손님 리뷰 표시
-            showReview(beverage_completion);
+            showReview(beverage_completion, past_order);
             
 
             reStart.setVisibility(View.VISIBLE);
             reStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    drinkImg.setVisibility(View.GONE);
                     thirdIntent = new Intent(getApplicationContext(), StoreHall.class);
                     thirdIntent.putExtra("weather_index", weather);
                     thirdIntent.putExtra("time_index", time);
@@ -97,7 +100,7 @@ public class StoreHall extends AppCompatActivity {
             order = random.nextInt(12);
             clientNum = random.nextInt(7);
 
-            showBackground(weather);//날씨별 배경 표시                        ////////////////////////
+            showBackground(weather);//날씨별 배경 표시
             showOrder(order);//손님의 주문 표시
             showClient(order, clientNum, time, getIntent, clientImg, clientOrder, moveKitchen);//손님 이미지 표시
         }
@@ -315,8 +318,25 @@ public class StoreHall extends AppCompatActivity {
 
         return beverage;
     }
-    private void showReview(Integer beverage_completion) {
+    private void showReview(Integer beverage_completion, Integer past_order) {
 
+        if(beverage_completion==8) {
+            if(past_order == 0) drinkImg.setImageResource(R.drawable.ice_americano);
+            else if(past_order ==1) drinkImg.setImageResource(R.drawable.hot_americano);
+            else if(past_order==2) drinkImg.setImageResource(R.drawable.ice_latte);
+            else if(past_order==3) drinkImg.setImageResource(R.drawable.ice_americano);
+            else if(past_order==4) drinkImg.setImageResource(R.drawable.vanila_latte);
+            else if(past_order==5) drinkImg.setImageResource(R.drawable.hot_vanila_latte);
+            else if(past_order==6) drinkImg.setImageResource(R.drawable.vanila_americano);
+            else if(past_order==7) drinkImg.setImageResource(R.drawable.hot_vanila_americano);
+            else if(past_order==8) drinkImg.setImageResource(R.drawable.lemonade);
+            else if(past_order==9) drinkImg.setImageResource(R.drawable.hot_lemon_tea);
+            else if(past_order==10) drinkImg.setImageResource(R.drawable.ice_matcha_latte);
+            else if(past_order==11) drinkImg.setImageResource(R.drawable.hot_matcha_latte);
+            else if(past_order==12) drinkImg.setImageResource(R.drawable.strawberry_shake); }
+        else
+            drinkImg.setImageResource(R.drawable.ruined_drink);
+        drinkImg.setVisibility(View.VISIBLE);
         if (beverage_completion==-1) clientOrder.setText(R.string.completeMsgNegative);
         else if(beverage_completion==8) clientOrder.setText(R.string.completeMsg100);
         else if(beverage_completion>=6) clientOrder.setText(R.string.completeMsg85);
@@ -329,17 +349,40 @@ public class StoreHall extends AppCompatActivity {
 
         expTextView.setVisibility(View.VISIBLE);
 
-        // Add code here to show the review and update the Exp based on beverage_completion
-
-        // Assume 10 points for each correct ingredient
-        // int expGained = beverage_completion * 10;
-
         // Get current Exp
         String userId = "susie0275@naver.com";
         int currentExp = dbHelper.getUserExp(userId);
 
-        if (currentExp != -1) {
-            int newExp = currentExp + 100;
+
+        if(currentExp != -1){
+            int newExp = 0;
+
+            if(beverage_completion == -1){              //"저 왜 음료 안주세요?"
+                newExp = currentExp - 100;
+                Toast.makeText(this, "Exp -100", Toast.LENGTH_SHORT).show();
+            }
+            else if(beverage_completion==8){            //"모든게 완벽해요!"
+                newExp = currentExp + 150;
+                Toast.makeText(this, "Exp +150", Toast.LENGTH_SHORT).show();
+            }
+            else if(beverage_completion>=6){            //"마음에 들어요 다음에 또 오고 싶군요"
+                newExp = currentExp + 100;
+                Toast.makeText(this, "Exp +100", Toast.LENGTH_SHORT).show();
+            }
+            else if(beverage_completion>=4){            //"이게 제가 시킨 음료 맞나요?"
+                newExp = currentExp + 50;
+                Toast.makeText(this, "Exp +50", Toast.LENGTH_SHORT).show();
+            }
+            else if(beverage_completion>=2){            //"지금 장난하세요?"
+                newExp = currentExp - 50;
+                Toast.makeText(this, "Exp -50", Toast.LENGTH_SHORT).show();
+            }
+            else if (beverage_completion>=0){           //"사장 나오라 그래!"
+                newExp = currentExp - 150;
+                Toast.makeText(this, "Exp -150", Toast.LENGTH_SHORT).show();
+            }
+
+
             boolean isUpdated = dbHelper.updateUserExp(userId, newExp);
 
             if (isUpdated) {
@@ -351,7 +394,9 @@ public class StoreHall extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Failed to retrieve current Exp.", Toast.LENGTH_SHORT).show();
         }
+
     }
+
     private void showOrder(Integer order) {
         if (order==0) clientOrder.setText(R.string.order0);
         else if (order == 1) clientOrder.setText(R.string.order1);
