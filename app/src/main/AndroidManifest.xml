@@ -40,7 +40,7 @@
                 <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
                 <data
                     android:host="oauth"
-                    android:scheme="kakaoa915a829deead991fe5c7da42b3417db" />
+                    android:scheme="kakaoe414ebf3d2a0a5f23d76fd14ea6dab67" />
             </intent-filter>
         </activity>
         <activity
@@ -48,11 +48,11 @@
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/SplashTheme">
-            <!--<intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
@@ -80,11 +80,11 @@
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/SplashTheme">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
     </application>
 

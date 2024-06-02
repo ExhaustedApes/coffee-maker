@@ -32,6 +32,22 @@
         android:gravity="center"
         android:layout_gravity="bottom">
         <ImageButton
+            android:id="@+id/coffee_toggle"
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/coffee"
+            android:contentDescription="@string/coffee"
+            ></ImageButton>
+        <ImageButton
+            android:id="@+id/ice_toggle"
+            android:layout_width="200px"
+            android:layout_height="200px"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/icebucket"
+            android:contentDescription="@string/ice"
+            ></ImageButton>
+        <ImageButton
             android:id="@+id/water_toggle"
             android:layout_width="200px"
             android:layout_height="200px"
@@ -47,23 +63,6 @@
             android:background="@drawable/milk"
             android:contentDescription="@string/milk"
             ></ImageButton>
-        <ImageButton
-            android:id="@+id/ice_toggle"
-            android:layout_width="200px"
-            android:layout_height="200px"
-            android:layout_marginHorizontal="10dp"
-            android:background="@drawable/icebucket"
-            android:contentDescription="@string/ice"
-            ></ImageButton>
-        <ImageButton
-            android:id="@+id/coffee_toggle"
-            android:layout_width="200px"
-            android:layout_height="200px"
-            android:layout_marginHorizontal="10dp"
-            android:background="@drawable/coffee"
-            android:contentDescription="@string/coffee"
-            ></ImageButton>
-
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
