@@ -31,6 +31,14 @@ public class StoreKitchen extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_store_kitchen);
 
+        // MusicService1 중지
+        Intent serviceIntent1 = new Intent(this, MusicService1.class);
+        stopService(serviceIntent1);
+
+        // 새로운 음악 서비스 시작 : MusicService2 재생
+        Intent serviceIntent2 = new Intent(this, MusicService2.class);
+        startService(serviceIntent2);
+
         Context context=getApplicationContext();
         firstIntent=getIntent();
         order = firstIntent.getIntExtra("order_index", -1);
@@ -78,11 +86,10 @@ public class StoreKitchen extends AppCompatActivity {
         ice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent iceIntent = new Intent(getApplicationContext(), IceBreaking.class);
-                startActivity(iceIntent);
 
                 iceOn = !iceOn;
                 ViewGroup.LayoutParams params = ice.getLayoutParams();
+
                 if (iceOn) {
                     params.width = 300;  // 원하는 너비 (픽셀 단위)
                     params.height = 300; // 원하는 높이 (픽셀 단위)
@@ -90,13 +97,17 @@ public class StoreKitchen extends AppCompatActivity {
                     params.width = 200;  // 원래 너비 (픽셀 단위)
                     params.height = 200; // 원래 높이 (픽셀 단위)
                 }
-                ice.setLayoutParams(params);}
+                ice.setLayoutParams(params);
+
+                if(iceOn) { //ice 선택 활성 시 게임모드 진입
+                    Intent iceIntent = new Intent(getApplicationContext(), IceBreaking.class);
+                    startActivity(iceIntent);
+                }
+            }
         });
         coffee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent coffeeIntent = new Intent(getApplicationContext(), coffeeGrinding.class);
-                startActivity(coffeeIntent);
 
                 coffeeOn = !coffeeOn;
                 ViewGroup.LayoutParams params = coffee.getLayoutParams();
@@ -107,7 +118,13 @@ public class StoreKitchen extends AppCompatActivity {
                     params.width = 200;  // 원래 너비 (픽셀 단위)
                     params.height = 200; // 원래 높이 (픽셀 단위)
                 }
-                coffee.setLayoutParams(params);}
+                coffee.setLayoutParams(params);
+
+                if(coffeeOn){ //coffee 선택 활성 시 게임모드 진입
+                    Intent coffeeIntent = new Intent(getApplicationContext(), coffeeGrinding.class);
+                    startActivity(coffeeIntent);
+                }
+            }
         });
         vanilla.setOnClickListener(new View.OnClickListener() {
             @Override

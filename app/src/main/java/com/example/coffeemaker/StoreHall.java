@@ -2,6 +2,7 @@ package com.example.coffeemaker;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,6 +21,7 @@ public class StoreHall extends AppCompatActivity {
     private static final String TAG = "storehall";
     private DBHelper dbHelper;
 
+    private MediaPlayer mediaPlayer;// 딩동 소리를 위한 미디어
     ImageView clientImg,drinkImg;//손님 이미지,음료 이미지
     TextView clientOrder;//손님 주문 대사
     Button moveKitchen, reStart;//눌렀을 때 kitchen.class, StoreHall2.class로 가는 버튼
@@ -50,6 +52,13 @@ public class StoreHall extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_store_hall);
 
+        // MusicService2 중지
+        Intent serviceIntent2 = new Intent(this, MusicService2.class);
+        stopService(serviceIntent2);
+
+        // 새로운 음악 서비스 시작 : MusicService1 재생
+        Intent serviceIntent1 = new Intent(this, MusicService1.class);
+        startService(serviceIntent1);
         dbHelper = new DBHelper(this);
 
         clientImg=(ImageView)findViewById(R.id.client);
@@ -97,7 +106,7 @@ public class StoreHall extends AppCompatActivity {
         }
 
         if(getIntent!=1) {
-            time = random.nextInt(5000);
+            time = random.nextInt(8000);
             order = random.nextInt(12);
             clientNum = random.nextInt(9);
 
@@ -323,7 +332,7 @@ public class StoreHall extends AppCompatActivity {
     }
     private void showReview(Integer beverage_completion, Integer past_order) {
 
-        if(beverage_completion==8) {
+        if(beverage_completion>=4) {
             if(past_order == 0) drinkImg.setImageResource(R.drawable.ice_americano);
             else if(past_order ==1) drinkImg.setImageResource(R.drawable.hot_americano);
             else if(past_order==2) drinkImg.setImageResource(R.drawable.ice_latte);
@@ -339,7 +348,9 @@ public class StoreHall extends AppCompatActivity {
             else if(past_order==12) drinkImg.setImageResource(R.drawable.strawberry_shake); }
         else
             drinkImg.setImageResource(R.drawable.ruined_drink);
+
         drinkImg.setVisibility(View.VISIBLE);
+
         if (beverage_completion==-1) clientOrder.setText(R.string.completeMsgNegative);
         else if(beverage_completion==8) clientOrder.setText(R.string.completeMsg100);
         else if(beverage_completion>=6) clientOrder.setText(R.string.completeMsg85);
@@ -401,6 +412,14 @@ public class StoreHall extends AppCompatActivity {
     }
 
     private void showOrder(Integer order) {
+        // 주문이 표시되면 음악이 재생됩니다
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
+        // dingdong.mp3를 재생합니다.
+        mediaPlayer = MediaPlayer.create(this, R.raw.dingdong);
+        mediaPlayer.start();
+
         if (order==0) clientOrder.setText(R.string.order0);
         else if (order == 1) clientOrder.setText(R.string.order1);
         else if (order == 2) clientOrder.setText(R.string.order2);

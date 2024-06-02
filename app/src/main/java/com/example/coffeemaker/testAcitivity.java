@@ -38,16 +38,21 @@ public class testAcitivity extends AppCompatActivity {
                 // get weather through web crawling
                 Elements content1 = doc.select(".graph_content");
                 weather_string = content1.text(); // 초기화한 weather_string에 값 저장
-                Log.d("weather_string", weather_string);
+                Log.d("testActivity", "weather_string: "+weather_string);
                 String[] split_weather = weather_string.split(" "); // split_weather: split을 위해 존재.
                 String now_weather = split_weather[1];
-                Log.d("weather_now", now_weather);
+                String now_time = split_weather[0];
+                now_time=now_time.split("시")[0];
+                Integer time = Integer.parseInt(now_time)-1;
+                Log.d("testActivity", "now_weather: "+now_weather+"\nnow_time: "+now_time);
 
                 // now_weather 값에 따라 weather_index 설정
                 if (now_weather.equals("비") || now_weather.equals("구름많음") || now_weather.equals("흐림") || now_weather.equals("소나기")) {
-                    weather_index = 0;
+                    if(time>=7&&time<20) weather_index=0; //비, 구름많음, 흐림, 소나기인 날씨지표에서 7~19시인 경우 흐린 낮으로 표시
+                    else weather_index = 2; //비, 구름많음, 흐림, 소나기인 날씨지표에서 20~6시인 경우 흐린 밤으로 표시
                 } else {
-                    weather_index = 3;
+                    if(time>=7&&time<20) weather_index=1; //비, 구름많음, 흐림, 소나기 외 날씨지표에서 7~19시인 경우 맑은 낮으로 표시
+                    else weather_index = 3;//비, 구름많음, 흐림, 소나기 외 날씨지표에서 20~69시인 경우 맑은 밤으로 표시
                 }
                 Log.d("weather_index", ""+weather_index);
             } catch (IOException e) {
@@ -67,7 +72,7 @@ public class testAcitivity extends AppCompatActivity {
     private void changeBG(int weather_index) {
 
         Log.d("weather_index at changeBG", ""+weather_index);
-        Log.d("status", "weather changed");
+        Log.d("weather", "weather changed");
         Intent intent = new Intent(getApplicationContext(), StoreHall.class);
         intent.putExtra("weather_index", weather_index);
         startActivity(intent);
