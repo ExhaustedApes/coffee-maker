@@ -41,7 +41,7 @@ public class testAcitivity extends AppCompatActivity {
                 Log.d("testActivity", "weather_string: "+weather_string);
                 String[] split_weather = weather_string.split(" "); // split_weather: split을 위해 존재.
                 String now_weather = split_weather[1];
-                String now_time = split_weather[0];
+                String now_time = split_weather[3];
                 now_time=now_time.split("시")[0];
                 Integer time = Integer.parseInt(now_time)-1;
                 Log.d("testActivity", "now_weather: "+now_weather+"\nnow_time: "+now_time);
