@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,8 +33,8 @@ public class StoreKitchen extends AppCompatActivity {
 
         Context context=getApplicationContext();
         firstIntent=getIntent();
-        order = firstIntent.getIntExtra("order_idx", -1);
-        client_num = firstIntent.getIntExtra("client_idx", -1);
+        order = firstIntent.getIntExtra("order_index", -1);
+        client_num = firstIntent.getIntExtra("client_index", -1);
         weather_num = firstIntent.getIntExtra("weather_index", -3);
 
         btnDone=(Button)findViewById(R.id.done_button);
@@ -181,7 +182,9 @@ public class StoreKitchen extends AppCompatActivity {
                 secondIntent.putExtra("is_matchaOn", matchaOn);
                 secondIntent.putExtra("is_strawberryOn", strawberryOn);
                 secondIntent.putExtra("intent_index", 1);
+                Log.d("index", "when move to Hall, weather, client, order: "+weather_num+" "+client_num+" "+order);
                 secondIntent.putExtra("order_index", order);
+                secondIntent.putExtra("client_index", client_num);
                 secondIntent.putExtra("weather_index", weather_num);
                 startActivity(secondIntent);
                 finish();

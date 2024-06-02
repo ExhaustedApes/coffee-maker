@@ -24,13 +24,19 @@
             android:textStyle="bold"
             android:layout_margin="10dp"
             android:layout_gravity="center_horizontal"
-            android:visibility="visible" />
+            android:visibility="invisible" />
         <ImageView
             android:id="@+id/client"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:src="@drawable/client"
             android:visibility="invisible" />
+        <ImageView
+            android:id="@+id/drinkImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ruined_drink"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/Order"
